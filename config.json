@@ -1,0 +1,11 @@
+{
+  "initialStartup": {
+    "completed": true
+  },
+  "configValues": {
+    "maxTotalFollowing": 1000,
+    "minWaitTimeSeconds": 600,
+    "maxWaitTimeSeconds": 900,
+    "queueListMaxUsers": 1000
+  }
+}
