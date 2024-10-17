@@ -1,6 +1,6 @@
 {
   "initialStartup": {
-    "completed": true
+    "completed": false
   },
   "configValues": {
     "maxTotalFollowing": 1000,
