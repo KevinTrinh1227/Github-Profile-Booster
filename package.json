@@ -2,12 +2,12 @@
   "name": "github-auto-followers-bot",
   "version": "1.0.0",
   "description": "https://github.com/KevinTrinh1227/Github-Auto-Followers-Bot",
-  "main": "src/main.js",
+  "main": "src/index.js",
   "src": {
-    "github-auto-followers-bot": "src/main.js"
+    "github-auto-followers-bot": "src/index.js"
   },
   "scripts": {
-    "start": "node src/main.js",
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

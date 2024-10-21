@@ -12,6 +12,7 @@ const {
   nextInUnfollowQueue,
   addUserToUnfollowQueue,
   removeUserFromFollowQueue,
+  moveExpiredUsersToUnfollowQueue,
 } = require("./queues");
 const { getTotalFollowing } = require("./followingList");
 const {
@@ -87,6 +88,7 @@ async function processQueue() {
         await unfollowUser(nextUnfollower);
       } else {
         console.log("No users to unfollow.");
+        await moveExpiredUsersToUnfollowQueue();
       }
 
       console.log("Waiting before the next cycle...\n\n\n");
