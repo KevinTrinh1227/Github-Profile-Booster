@@ -1,6 +1,6 @@
 <div align="center">
   <h1>
-    Github-Auto-Followers-Bot
+    Github-Followers-Bot
   </h1>
 </div>
 <p align="center">
@@ -9,7 +9,7 @@
 
 <div align="center">
   <img src="https://img.shields.io/badge/maintenance-experimental-blue.svg" alt="Maintained status" />
-  <img src="https://img.shields.io/github/v/release/KevinTrinh1227/Github-Auto-Followers-Bot.svg" alt="Release badge" />
+  <img src="https://img.shields.io/github/v/release/KevinTrinh1227/Github-Followers-Bot.svg" alt="Release badge" />
 </div>
 
 ## 📌 Important Info (Please Read)
@@ -32,7 +32,7 @@ This project was built using Node 16.20.2 on Ubuntu (Linux)
 1. Clone repository OR download the [latest release](https://github.com/KevinTrinh1227/Github-Auto-Followers-Bot/releases)
 
    ```sh
-   git clone https://github.com/KevinTrinh1227/Github-Auto-Followers-Bot
+   git clone https://github.com/KevinTrinh1227/Github-Followers-Bot
    ```
 
    ```sh
