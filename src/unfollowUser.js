@@ -13,6 +13,8 @@ const currentFollowersPath = path.join(
 );
 const unfollowQueuePath = path.join(__dirname, "../data/unfollow_queue.json");
 
+const { sendUnfollowedUserDiscordEmbed } = require("./discordWebhook");
+
 // Path to the JSON file storing past followed and unfollowed users
 const pastFollowsUnfollowsPath = path.join(
   __dirname,
@@ -37,6 +39,8 @@ async function unfollowUser(user) {
 
     if (response.status === 204) {
       console.log(`Successfully unfollowed ${user.login}`);
+
+      sendUnfollowedUserDiscordEmbed(user);
 
       // Add the unfollowedAt timestamp to the user object
       user.unfollowedAt = new Date().toISOString();

@@ -65,14 +65,12 @@ async function addUserFollowersToQueue(username) {
   // Calculate how many more users can be added
   const availableSpace = maxQueueSize - currentQueueSize;
 
-  // Check if the queue has reached or exceeded the maximum size
-  if (availableSpace <= 0) {
-    console.log("Queue has reached its maximum limit. Ignoring the request.");
-    return;
-  } else if (availableSpace <= 100) {
+  // Only make an API request if more than 100 spaces are available
+  if (availableSpace < 100) {
     console.log(
-      `Queue is close to its maximum limit. Can only add ${availableSpace} more users.`
+      `Not enough space in the queue. Available space: ${availableSpace} (NO API REQ. WAS MADE)`
     );
+    return;
   }
 
   try {

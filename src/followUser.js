@@ -8,6 +8,7 @@ const {
   removeUserFromFollowQueue,
   addUserToPendingFollowBack,
 } = require("./queues");
+const { sendFollowedUserDiscordEmbed } = require("./discordWebhook");
 
 // Load the GitHub token from environment variables
 const YOUR_GITHUB_PERSONAL_ACCESS_TOKEN = process.env.GITHUB_TOKEN;
@@ -90,6 +91,7 @@ async function followUser(userObject) {
 
     if (response.status === 204) {
       console.log(`Successfully followed ${username}.`);
+      await sendFollowedUserDiscordEmbed(userObject);
       await addUserToPendingFollowBack(userObject);
       await saveUserIDToFollowed(userID);
     } else {

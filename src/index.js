@@ -19,7 +19,10 @@ const {
   addUserFollowersToQueue,
   getAllFollowersAndSaveToJson,
 } = require("./followersList");
-
+const {
+  sendDiscordNotification,
+  sendDiscordEmbed,
+} = require("./discordWebhook");
 const MY_GITHUB_USERNAME = process.env.MY_GITHUB_USERNAME;
 
 // Path to config file
@@ -37,33 +40,52 @@ async function saveConfig(config) {
   await fs.writeFile(configPath, data, "utf8");
 }
 
+// Helper function to get a random integer between min and max (inclusive)
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 // Main function for the processing loop
 async function processQueue() {
   const config = await loadConfig(); // Await loading of config file
   console.log("Starting the main processing loop...");
 
+  sendDiscordEmbed(
+    "Successfully connected to webhook!",
+    "Note that this application may result in your account getting banned. Please proceed with caution and use appropriate config settings.\n\n**Github Repo Link ➜** [Github-Followers-Bot](https://github.com/KevinTrinh1227/Github-Followers-Bot)\n**Report issues ➜** [Github Support Ticket](https://github.com/KevinTrinh1227/Github-Followers-Bot/issues)\n**My Github Page ➜** [Visit My Profile](https://github.com/KevinTrinh1227)\n\nPlease support me by **starring** and/or **forking** my repositories! Thank you for using my product!",
+    "#55FF55"
+  );
+
   while (true) {
     try {
       const myTotalFollowing = await getTotalFollowing(MY_GITHUB_USERNAME);
+      console.log(`\nMY TOTAL FOLLOWING IS AT: ${myTotalFollowing}`);
 
-      console.log(`MY TOTAL FOLLOWING IS AT: ${myTotalFollowing}`);
-
+      // Follow random number of users
       if (myTotalFollowing < config.configValues.maxTotalFollowing) {
-        // getting the next in queue
-        const nextFollower = await nextInFollowQueue(); // this gets user obj
-        //console.log(nextFollower);
-        if (nextFollower) {
-          const nextFollowerName = nextFollower.login;
-          const nextFollowerUserID = nextFollower.id;
-          console.log(
-            `Next follower name to process: ${nextFollowerName} (${nextFollowerUserID})`
-          );
+        const followCount = getRandomInt(
+          config.configValues.minCycleFollowCount,
+          config.configValues.maxCycleFollowCount
+        ); // Random number of users to follow
+        console.log(`Attempting to follow ${followCount} users...`);
 
-          await addUserFollowersToQueue(nextFollowerName);
-          await followUser(nextFollower); // follow user using entire object
-          await removeUserFromFollowQueue(nextFollowerUserID);
-        } else {
-          console.log("No followers left in the queue.");
+        for (let i = 0; i < followCount; i++) {
+          const nextFollower = await nextInFollowQueue(); // Get user object from the queue
+          if (nextFollower) {
+            const nextFollowerName = nextFollower.login;
+            const nextFollowerUserID = nextFollower.id;
+            console.log(
+              `Next follower name to process: ${nextFollowerName} (${nextFollowerUserID})`
+            );
+
+            await addUserFollowersToQueue(nextFollowerName);
+            await followUser(nextFollower); // Follow user using the entire object
+            await removeUserFromFollowQueue(nextFollowerUserID);
+          } else {
+            console.log("No followers left in the queue.");
+            break;
+          }
+          await waitRandomInterval(); // Wait before processing the next user
         }
       } else {
         console.log(
@@ -71,32 +93,36 @@ async function processQueue() {
         );
       }
 
-      //await unfollowUser("example-username-to-unfollow");
+      // Unfollow random number of users
+      const unfollowCount = getRandomInt(
+        config.configValues.minCycleUnfollowCount,
+        config.configValues.maxCycleUnfollowCount
+      ); // Random number of users to unfollow
+      console.log(`Attempting to unfollow ${unfollowCount} users...`);
 
-      // Example: Fetch followers of a user and add them to the queue
-      //await addUserFollowersToQueue("example-username-to-follow");
-      await getAllFollowersAndSaveToJson(MY_GITHUB_USERNAME);
-      await moveFollowBacksToUnfollowQueue(); // will see if we have user in both pending
-
-      const nextUnfollower = await nextInUnfollowQueue();
-      console.log("\nUNFOLLOWING NOW STARTING...");
-      if (nextUnfollower) {
-        //console.log("Next user to unfollow:", nextUnfollower);
-        console.log(
-          `Next user to unfollow is ${nextUnfollower.login} (${nextUnfollower.id})`
-        );
-        await unfollowUser(nextUnfollower);
-      } else {
-        console.log("No users to unfollow.");
-        await moveExpiredUsersToUnfollowQueue();
+      for (let i = 0; i < unfollowCount; i++) {
+        const nextUnfollower = await nextInUnfollowQueue();
+        if (nextUnfollower) {
+          console.log(
+            `Next user to unfollow is ${nextUnfollower.login} (${nextUnfollower.id})`
+          );
+          await unfollowUser(nextUnfollower);
+        } else {
+          console.log("No users to unfollow.");
+          break;
+        }
+        await waitRandomInterval(); // Wait before processing the next unfollow
       }
 
+      // Move expired users to the unfollow queue if none to unfollow
+      await moveExpiredUsersToUnfollowQueue();
+
       console.log("Waiting before the next cycle...\n\n\n");
-      await waitRandomInterval(); // this will wait for random interval...
+      await waitRandomInterval(); // Wait for a random interval...
     } catch (error) {
       // Log errors and continue
       console.error("Error in the processing loop:", error);
-      await waitRandomInterval(); // this will wait for random interval...
+      await waitRandomInterval(); // Wait for a random interval...
     }
   }
 }
