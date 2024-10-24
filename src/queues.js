@@ -112,8 +112,12 @@ async function moveExpiredUsersToUnfollowQueue() {
           // Add the user to the unfollow queue with a timestamp
           unfollowQueue[user.id] = {
             ...user,
-            added_to_queue_on: new Date().toISOString(), // Add a timestamp for when the user was added
+            moved_to_unfollow_queue_on: new Date().toISOString(), // Add a timestamp for when the user was added
+            unfollow_reason: "Given time for user to follow back has expired",
           };
+
+          // log it in disc if webhook feature enabled
+          await sendMovedUserToUnfollowQueueDiscordEmbed(user);
 
           // Remove the user from pending_follow_back.json
           delete pendingFollowBack[userId];

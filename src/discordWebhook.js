@@ -132,15 +132,12 @@ async function sendUnfollowedUserDiscordEmbed(user) {
       embeds: [
         {
           title: `Successfully unfollowed ${user.login} (${user.id})`,
+          url: user.html_url,
+          description: `Reason: ${user.unfollow_reason}`,
           thumbnail: {
             url: user.avatar_url, // Set the user's avatar as the embed thumbnail
           },
           fields: [
-            {
-              name: "Profile URL",
-              value: `[${user.login}](${user.html_url})`, // Embed the link to the user's profile
-              inline: true, // Single line for link
-            },
             {
               name: "Followed On",
               value: new Date(user.followed_on).toLocaleString(), // Format the followed_on date
@@ -149,6 +146,62 @@ async function sendUnfollowedUserDiscordEmbed(user) {
             {
               name: "Unfollowed On",
               value: new Date().toLocaleString(), // Display current time and date
+              inline: true, // Single line for unfollowed date
+            },
+            {
+              name: "Reason",
+              value: user.unfollow_reason, // Display current time and date
+              inline: true, // Single line for unfollowed date
+            },
+          ],
+          color: colorDecimal, // Use the custom color
+          footer: {
+            text: "Built by www.kevintrinh.dev", // Add footer text
+          },
+          timestamp: new Date().toISOString(),
+        },
+      ],
+    });
+    //console.log(`Embed notification sent to Discord for unfollowed user ${user.login}!`);
+  } catch (error) {
+    console.error("Error sending Discord embed notification:", error);
+  }
+}
+
+// Function to send an embed for an unfollowed user object
+async function sendMovedUserToUnfollowQueueDiscordEmbed(user) {
+  if (!isDiscordEnabled) {
+    console.log(
+      "Discord integration is disabled. Skipping unfollowed user embed notification."
+    );
+    return;
+  }
+
+  const colorDecimal = hexToDecimal("#FFFF55"); // Custom color in decimal
+
+  try {
+    await axios.post(webhookURL, {
+      embeds: [
+        {
+          title: `Added user to unfollow queue: ${user.login} (${user.id})`,
+          url: user.html_url,
+          thumbnail: {
+            url: user.avatar_url, // Set the user's avatar as the embed thumbnail
+          },
+          fields: [
+            {
+              name: "Followed On",
+              value: new Date(user.followed_on).toLocaleString(), // Format the followed_on date
+              inline: true, // Single line for followed date
+            },
+            {
+              name: "Queue Timestamp",
+              value: new Date().toLocaleString(), // Display current time and date
+              inline: true, // Single line for unfollowed date
+            },
+            {
+              name: "Reason",
+              value: user.unfollow_reason, // Display current time and date
               inline: true, // Single line for unfollowed date
             },
           ],
@@ -171,4 +224,5 @@ module.exports = {
   sendDiscordEmbed,
   sendFollowedUserDiscordEmbed,
   sendUnfollowedUserDiscordEmbed,
+  sendMovedUserToUnfollowQueueDiscordEmbed,
 };

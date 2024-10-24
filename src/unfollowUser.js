@@ -13,7 +13,10 @@ const currentFollowersPath = path.join(
 );
 const unfollowQueuePath = path.join(__dirname, "../data/unfollow_queue.json");
 
-const { sendUnfollowedUserDiscordEmbed } = require("./discordWebhook");
+const {
+  sendUnfollowedUserDiscordEmbed,
+  sendMovedUserToUnfollowQueueDiscordEmbed,
+} = require("./discordWebhook");
 
 // Path to the JSON file storing past followed and unfollowed users
 const pastFollowsUnfollowsPath = path.join(
@@ -122,7 +125,6 @@ async function removeFromUnfollowQueue(userId) {
   }
 }
 
-// Function to move users from pending follow-back to unfollow queue if they followed back
 async function moveFollowBacksToUnfollowQueue() {
   try {
     // Load pending follow-back list
@@ -157,10 +159,19 @@ async function moveFollowBacksToUnfollowQueue() {
     for (const userID in pendingFollowBack) {
       if (currentFollowerIds.has(parseInt(userID))) {
         // If the user is following back, move them to the unfollow queue
-        unfollowQueue[userID] = {
+        const userObject = {
           ...pendingFollowBack[userID],
-          movedToUnfollowAt: new Date().toISOString(),
+          moved_to_unfollow_queue_on: new Date().toISOString(),
+          unfollow_reason: "User followed back",
         };
+
+        // Call the logThisUser function with userObject
+        // logThisUser(userObject);
+        await sendMovedUserToUnfollowQueueDiscordEmbed(userObject);
+        //console.log("test");
+
+        // Add the user to the unfollow queue
+        unfollowQueue[userID] = userObject;
 
         // Remove the user from the pending follow-back list
         delete pendingFollowBack[userID];

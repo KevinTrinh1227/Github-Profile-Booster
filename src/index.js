@@ -116,6 +116,8 @@ async function processQueue() {
 
       // Move expired users to the unfollow queue if none to unfollow
       await moveExpiredUsersToUnfollowQueue();
+      // check to see who has followed us back then put them in unfollow queue
+      await moveFollowBacksToUnfollowQueue();
 
       console.log("Waiting before the next cycle...\n\n\n");
       await waitRandomInterval(); // Wait for a random interval...
