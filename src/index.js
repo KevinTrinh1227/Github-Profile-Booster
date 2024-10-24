@@ -51,10 +51,12 @@ async function processQueue() {
   console.log("Starting the main processing loop...");
 
   sendDiscordEmbed(
-    "Successfully connected to webhook!",
-    "Note that this application may result in your account getting banned. Please proceed with caution and use appropriate config settings.\n\n**Github Repo Link ➜** [Github-Followers-Bot](https://github.com/KevinTrinh1227/Github-Followers-Bot)\n**Report issues ➜** [Github Support Ticket](https://github.com/KevinTrinh1227/Github-Followers-Bot/issues)\n**My Github Page ➜** [Visit My Profile](https://github.com/KevinTrinh1227)\n\nPlease support me by **starring** and/or **forking** my repositories! Thank you for using my product!",
+    "Application is now online!",
+    "Note that this application may result in your account getting banned. Please proceed with caution and use appropriate config settings.\n\n**Github Repo Link ➜** [Github-Followers-Bot](https://github.com/KevinTrinh1227/Github-Followers-Bot)\n**Report issues ➜** [Github Support Ticket](https://github.com/KevinTrinh1227/Github-Followers-Bot/issues)\n**My Github Page ➜** [Visit My Profile](https://github.com/KevinTrinh1227)\n\nReport any and all issues on Github. Please support me by **starring** and/or **forking** my repositories! Thank you for using my product!",
     "#55FF55"
   );
+
+  // await moveFollowBacksToUnfollowQueue();
 
   while (true) {
     try {

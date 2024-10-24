@@ -82,13 +82,14 @@ async function sendFollowedUserDiscordEmbed(user) {
       embeds: [
         {
           title: `Successfully followed ${user.login} (${user.id})`,
+          description: `[[Github Profile]](${user.html_url}) [[Repositories]](https://github.com/${user.login}?tab=repositories) [[Starred Repos]](https://github.com/${user.login}?tab=stars)`,
           thumbnail: {
             url: user.avatar_url, // Set the user's avatar as the embed thumbnail
           },
           fields: [
             {
-              name: "Profile URL",
-              value: `[${user.login}](${user.html_url})`, // Embed the link to the user's profile
+              name: "Username",
+              value: user.login, // Embed the link to the user's profile
               inline: true, // Keep fields on the same line
             },
             {
@@ -97,7 +98,7 @@ async function sendFollowedUserDiscordEmbed(user) {
               inline: true, // Keep fields on the same line
             },
             {
-              name: "Followed At",
+              name: "Followed On",
               value: new Date().toLocaleString(), // Display current time and date
               inline: true, // Keep fields on the same line
             },
@@ -132,31 +133,40 @@ async function sendUnfollowedUserDiscordEmbed(user) {
       embeds: [
         {
           title: `Successfully unfollowed ${user.login} (${user.id})`,
-          url: user.html_url,
-          description: `Reason: ${user.unfollow_reason}`,
+          description: `[[Github Profile]](${user.html_url}) [[Repositories]](https://github.com/${user.login}?tab=repositories) [[Starred Repos]](https://github.com/${user.login}?tab=stars)`,
           thumbnail: {
             url: user.avatar_url, // Set the user's avatar as the embed thumbnail
           },
           fields: [
             {
               name: "Followed On",
-              value: new Date(user.followed_on).toLocaleString(), // Format the followed_on date
-              inline: true, // Single line for followed date
+              value: new Date(user.followed_on).toLocaleString(),
+              inline: true,
             },
             {
+              name: "Unfollow Queue Timestamp",
+              value: new Date(user.added_to_queue_on).toLocaleString(),
+              inline: true,
+            },
+            // Empty field to ensure a new line starts after two fields
+            { name: "\u200B", value: "\u200B", inline: true },
+
+            {
               name: "Unfollowed On",
-              value: new Date().toLocaleString(), // Display current time and date
-              inline: true, // Single line for unfollowed date
+              value: new Date().toLocaleString(),
+              inline: true,
             },
             {
               name: "Reason",
-              value: user.unfollow_reason, // Display current time and date
-              inline: true, // Single line for unfollowed date
+              value: user.unfollow_reason || "N/A",
+              inline: true,
             },
+            // Another empty field to force two fields per line
+            { name: "\u200B", value: "\u200B", inline: true },
           ],
-          color: colorDecimal, // Use the custom color
+          color: colorDecimal,
           footer: {
-            text: "Built by www.kevintrinh.dev", // Add footer text
+            text: "Built by www.kevintrinh.dev",
           },
           timestamp: new Date().toISOString(),
         },
@@ -184,7 +194,7 @@ async function sendMovedUserToUnfollowQueueDiscordEmbed(user) {
       embeds: [
         {
           title: `Added user to unfollow queue: ${user.login} (${user.id})`,
-          url: user.html_url,
+          description: `[[Github Profile]](${user.html_url}) [[Repositories]](https://github.com/${user.login}?tab=repositories) [[Starred Repos]](https://github.com/${user.login}?tab=stars)`,
           thumbnail: {
             url: user.avatar_url, // Set the user's avatar as the embed thumbnail
           },
@@ -195,7 +205,7 @@ async function sendMovedUserToUnfollowQueueDiscordEmbed(user) {
               inline: true, // Single line for followed date
             },
             {
-              name: "Queue Timestamp",
+              name: "Moved to Queue",
               value: new Date().toLocaleString(), // Display current time and date
               inline: true, // Single line for unfollowed date
             },
