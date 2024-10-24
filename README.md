@@ -23,7 +23,7 @@ This project is **experimental** and was developed for **educational purposes** 
 **By using this tool, you acknowledge the risk** of your account being flagged or banned for violating GitHub's policies. Proceed with caution, and use at your own risk. This tool is intended solely for learning purposes, and the developer is not responsible for any misuse or potential consequences.
 
 ## 👥 What is this project?
-This project is a Node.js application that automates following and unfollowing users on GitHub at random intervals, simulating human-like behavior. It uses a queue system to manage actions, integrates logging for tracking activity, ensures compliance with GitHub’s API rate limits, and helps boost your profile growth, presence, and interactions by automatically engaging with users. Designed for long-term, 24/7 operation, it efficiently handles large volumes of users by optimizing API calls and minimizing redundant actions, ensuring smooth and resource-effective performance.
+This project is a Node.js application that automates following and unfollowing users on GitHub at random intervals, simulating human-like behavior. It uses a queue system to manage actions, integrates logging for tracking activity, and includes a Discord webhook feature for real-time notifications of follow and unfollow events. The app ensures compliance with GitHub’s API rate limits and helps boost your profile growth, presence, and interactions by automatically engaging with users. Designed for long-term, 24/7 operation, it efficiently handles large volumes of users by optimizing API calls and minimizing redundant actions, ensuring smooth and resource-effective performance.
 
 This project was built using Node 16.20.2 on Ubuntu (Linux)
 
