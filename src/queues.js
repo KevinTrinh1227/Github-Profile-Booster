@@ -10,6 +10,11 @@ const pendingFollowBackPath = path.join(
 const unfollowQueuePath = path.join(__dirname, "../data/unfollow_queue.json");
 const configPath = path.join(__dirname, "../config.json");
 
+const {
+  sendUnfollowedUserDiscordEmbed,
+  sendMovedUserToUnfollowQueueDiscordEmbed,
+} = require("./discordWebhook");
+
 // Function to remove users from follow_queue.json if they are present in the followedUsersSet
 async function cleanFollowQueue(followedUsersSet) {
   try {

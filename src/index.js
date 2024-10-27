@@ -23,6 +23,15 @@ const {
   sendDiscordNotification,
   sendDiscordEmbed,
 } = require("./discordWebhook");
+
+const cron = require("node-cron");
+const { sendDailyMetrics } = require("./metrics");
+// Schedule to run every day at 12am
+cron.schedule("0 0 * * *", async () => {
+  await sendDailyMetrics();
+  console.log("Daily metrics job executed at 12am");
+});
+
 const MY_GITHUB_USERNAME = process.env.MY_GITHUB_USERNAME;
 
 // Path to config file
@@ -49,6 +58,7 @@ function getRandomInt(min, max) {
 async function processQueue() {
   const config = await loadConfig(); // Await loading of config file
   console.log("Starting the main processing loop...");
+  await sendDailyMetrics();
 
   sendDiscordEmbed(
     "Application is now online!",

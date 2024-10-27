@@ -117,6 +117,137 @@ async function sendFollowedUserDiscordEmbed(user) {
   }
 }
 
+// Function to send an embed for daily metrics
+async function sendDailyMetricsDiscordEmbed(metrics) {
+  if (!isDiscordEnabled) {
+    console.log(
+      "Discord integration is disabled. Skipping daily metrics notification."
+    );
+    return;
+  }
+
+  const colorDecimal = hexToDecimal("#55FF55"); // Green color in decimal
+  const today = new Date().toLocaleDateString();
+
+  try {
+    await axios.post(webhookURL, {
+      embeds: [
+        {
+          title: `📊 Daily Metrics - ${today}`,
+          fields: [
+            {
+              name: "Total Follows (24 Hours)",
+              value:
+                metrics.follow_unfollow_stats.total_follows_last_day.toString(),
+              inline: true,
+            },
+            {
+              name: "Total Follows (Week)",
+              value:
+                metrics.follow_unfollow_stats.total_follows_last_week.toString(),
+              inline: true,
+            },
+            {
+              name: "Total Follows (Month)",
+              value:
+                metrics.follow_unfollow_stats.total_follows_last_month.toString(),
+              inline: true,
+            },
+            {
+              name: "Total Unfollows (24 Hours)",
+              value:
+                metrics.follow_unfollow_stats.total_unfollows_last_day.toString(),
+              inline: true,
+            },
+            {
+              name: "Unfollows - Followed Back (24 Hours)",
+              value:
+                metrics.follow_unfollow_stats.unfollowed_followed_back_last_day.toString(),
+              inline: true,
+            },
+            {
+              name: "Unfollows - Expired (24 Hours)",
+              value:
+                metrics.follow_unfollow_stats.unfollowed_expired_last_day.toString(),
+              inline: true,
+            },
+            {
+              name: "Total Unfollows (Week)",
+              value:
+                metrics.follow_unfollow_stats.total_unfollows_last_week.toString(),
+              inline: true,
+            },
+            {
+              name: "Unfollows - Followed Back (Week)",
+              value:
+                metrics.follow_unfollow_stats.unfollowed_followed_back_last_week.toString(),
+              inline: true,
+            },
+            {
+              name: "Unfollows - Expired (Week)",
+              value:
+                metrics.follow_unfollow_stats.unfollowed_expired_last_week.toString(),
+              inline: true,
+            },
+            {
+              name: "Total Unfollows (Month)",
+              value:
+                metrics.follow_unfollow_stats.total_unfollows_last_month.toString(),
+              inline: true,
+            },
+            {
+              name: "Unfollows - Followed Back (Month)",
+              value:
+                metrics.follow_unfollow_stats.unfollowed_followed_back_last_month.toString(),
+              inline: true,
+            },
+            {
+              name: "Unfollows - Expired (Month)",
+              value:
+                metrics.follow_unfollow_stats.unfollowed_expired_last_month.toString(),
+              inline: true,
+            },
+            {
+              name: "Total in Unfollow Queue",
+              value: metrics.general_metrics.total_unfollow_queue.toString(),
+              inline: true,
+            },
+            {
+              name: "Total in Follow Queue",
+              value: metrics.general_metrics.total_follow_queue.toString(),
+              inline: true,
+            },
+            {
+              name: "Total Pending Follow Back",
+              value:
+                metrics.general_metrics.total_pending_follow_back.toString(),
+              inline: true,
+            },
+            {
+              name: "Total Users Followed",
+              value: metrics.general_metrics.total_users_followed.toString(),
+              inline: true,
+            },
+            {
+              name: "Total Followers",
+              value: metrics.general_metrics.total_current_followers.toString(),
+              inline: true,
+            },
+          ],
+          color: colorDecimal,
+          footer: {
+            text: "Built by www.kevintrinh.dev",
+          },
+          timestamp: new Date().toISOString(),
+        },
+      ],
+    });
+    console.log("Daily metrics embed sent to Discord!");
+  } catch (error) {
+    console.error("Error sending Discord embed notification:", error);
+  }
+}
+
 // Function to send an embed for an unfollowed user object
 async function sendUnfollowedUserDiscordEmbed(user) {
   if (!isDiscordEnabled) {
@@ -235,4 +366,5 @@ module.exports = {
   sendFollowedUserDiscordEmbed,
   sendUnfollowedUserDiscordEmbed,
   sendMovedUserToUnfollowQueueDiscordEmbed,
+  sendDailyMetricsDiscordEmbed,
 };
