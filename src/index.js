@@ -58,7 +58,7 @@ function getRandomInt(min, max) {
 async function processQueue() {
   const config = await loadConfig(); // Await loading of config file
   console.log("Starting the main processing loop...");
-  await sendDailyMetrics();
+  // await sendDailyMetrics();
 
   sendDiscordEmbed(
     "Application is now online!",
