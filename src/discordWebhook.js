@@ -129,111 +129,37 @@ async function sendDailyMetricsDiscordEmbed(metrics) {
   const colorDecimal = hexToDecimal("#55FF55"); // Green color in decimal
   const today = new Date().toLocaleDateString();
 
+  // Combine all metrics into a single description string
+  const description = `
+**Total Follows (24 Hours):** ${metrics.follow_unfollow_stats.total_follows_last_day}
+**Total Follows (Week):** ${metrics.follow_unfollow_stats.total_follows_last_week}
+**Total Follows (Month):** ${metrics.follow_unfollow_stats.total_follows_last_month}
+
+**Total Unfollows (24 Hours):** ${metrics.follow_unfollow_stats.total_unfollows_last_day}
+**Unfollows - Followed Back (24 Hours):** ${metrics.follow_unfollow_stats.unfollowed_followed_back_last_day}
+**Unfollows - Expired (24 Hours):** ${metrics.follow_unfollow_stats.unfollowed_expired_last_day}
+
+**Total Unfollows (Week):** ${metrics.follow_unfollow_stats.total_unfollows_last_week}
+**Unfollows - Followed Back (Week):** ${metrics.follow_unfollow_stats.unfollowed_followed_back_last_week}
+**Unfollows - Expired (Week):** ${metrics.follow_unfollow_stats.unfollowed_expired_last_week}
+
+**Total Unfollows (Month):** ${metrics.follow_unfollow_stats.total_unfollows_last_month}
+**Unfollows - Followed Back (Month):** ${metrics.follow_unfollow_stats.unfollowed_followed_back_last_month}
+**Unfollows - Expired (Month):** ${metrics.follow_unfollow_stats.unfollowed_expired_last_month}
+
+**Total in Unfollow Queue:** ${metrics.general_metrics.total_unfollow_queue}
+**Total in Follow Queue:** ${metrics.general_metrics.total_follow_queue}
+**Total Pending Follow Back:** ${metrics.general_metrics.total_pending_follow_back}
+**Total Users Followed:** ${metrics.general_metrics.total_users_followed}
+**Total Followers:** ${metrics.general_metrics.total_current_followers}
+`;
+
   try {
     await axios.post(webhookURL, {
       embeds: [
         {
           title: `📊 Daily Metrics - ${today}`,
-          fields: [
-            {
-              name: "Total Follows (24 Hours)",
-              value:
-                metrics.follow_unfollow_stats.total_follows_last_day.toString(),
-              inline: true,
-            },
-            {
-              name: "Total Follows (Week)",
-              value:
-                metrics.follow_unfollow_stats.total_follows_last_week.toString(),
-              inline: true,
-            },
-            {
-              name: "Total Follows (Month)",
-              value:
-                metrics.follow_unfollow_stats.total_follows_last_month.toString(),
-              inline: true,
-            },
-            {
-              name: "Total Unfollows (24 Hours)",
-              value:
-                metrics.follow_unfollow_stats.total_unfollows_last_day.toString(),
-              inline: true,
-            },
-            {
-              name: "Unfollows - Followed Back (24 Hours)",
-              value:
-                metrics.follow_unfollow_stats.unfollowed_followed_back_last_day.toString(),
-              inline: true,
-            },
-            {
-              name: "Unfollows - Expired (24 Hours)",
-              value:
-                metrics.follow_unfollow_stats.unfollowed_expired_last_day.toString(),
-              inline: true,
-            },
-            {
-              name: "Total Unfollows (Week)",
-              value:
-                metrics.follow_unfollow_stats.total_unfollows_last_week.toString(),
-              inline: true,
-            },
-            {
-              name: "Unfollows - Followed Back (Week)",
-              value:
-                metrics.follow_unfollow_stats.unfollowed_followed_back_last_week.toString(),
-              inline: true,
-            },
-            {
-              name: "Unfollows - Expired (Week)",
-              value:
-                metrics.follow_unfollow_stats.unfollowed_expired_last_week.toString(),
-              inline: true,
-            },
-            {
-              name: "Total Unfollows (Month)",
-              value:
-                metrics.follow_unfollow_stats.total_unfollows_last_month.toString(),
-              inline: true,
-            },
-            {
-              name: "Unfollows - Followed Back (Month)",
-              value:
-                metrics.follow_unfollow_stats.unfollowed_followed_back_last_month.toString(),
-              inline: true,
-            },
-            {
-              name: "Unfollows - Expired (Month)",
-              value:
-                metrics.follow_unfollow_stats.unfollowed_expired_last_month.toString(),
-              inline: true,
-            },
-            {
-              name: "Total in Unfollow Queue",
-              value: metrics.general_metrics.total_unfollow_queue.toString(),
-              inline: true,
-            },
-            {
-              name: "Total in Follow Queue",
-              value: metrics.general_metrics.total_follow_queue.toString(),
-              inline: true,
-            },
-            {
-              name: "Total Pending Follow Back",
-              value:
-                metrics.general_metrics.total_pending_follow_back.toString(),
-              inline: true,
-            },
-            {
-              name: "Total Users Followed",
-              value: metrics.general_metrics.total_users_followed.toString(),
-              inline: true,
-            },
-            {
-              name: "Total Followers",
-              value: metrics.general_metrics.total_current_followers.toString(),
-              inline: true,
-            },
-          ],
+          description: description,
           color: colorDecimal,
           footer: {
             text: "Built by www.kevintrinh.dev",
@@ -320,41 +246,42 @@ async function sendMovedUserToUnfollowQueueDiscordEmbed(user) {
 
   const colorDecimal = hexToDecimal("#FFFF55"); // Custom color in decimal
 
+  // Combine all details into the description
+  const description = `
+  **User:** [${user.login}](https://github.com/${user.login})  
+  **ID:** ${user.id}  
+  **Followed On:** ${new Date(user.followed_on).toLocaleString()}  
+  **Moved to Queue:** ${new Date().toLocaleString()}  
+  **Reason:** ${user.unfollow_reason}  
+
+  **Links:**  
+  [[Github Profile]](${user.html_url}) [[Repositories]](https://github.com/${
+    user.login
+  }?tab=repositories) [[Starred Repos]](https://github.com/${
+    user.login
+  }?tab=stars)
+  `;
+
   try {
     await axios.post(webhookURL, {
       embeds: [
         {
-          title: `Added user to unfollow queue: ${user.login} (${user.id})`,
-          description: `[[Github Profile]](${user.html_url}) [[Repositories]](https://github.com/${user.login}?tab=repositories) [[Starred Repos]](https://github.com/${user.login}?tab=stars)`,
+          title: `Added user to unfollow queue`,
+          description: description,
           thumbnail: {
             url: user.avatar_url, // Set the user's avatar as the embed thumbnail
           },
-          fields: [
-            {
-              name: "Followed On",
-              value: new Date(user.followed_on).toLocaleString(), // Format the followed_on date
-              inline: true, // Single line for followed date
-            },
-            {
-              name: "Moved to Queue",
-              value: new Date().toLocaleString(), // Display current time and date
-              inline: true, // Single line for unfollowed date
-            },
-            {
-              name: "Reason",
-              value: user.unfollow_reason, // Display current time and date
-              inline: true, // Single line for unfollowed date
-            },
-          ],
           color: colorDecimal, // Use the custom color
           footer: {
-            text: "Built by www.kevintrinh.dev", // Add footer text
+            text: "Built by www.kevintrinh.dev",
           },
           timestamp: new Date().toISOString(),
         },
       ],
     });
-    //console.log(`Embed notification sent to Discord for unfollowed user ${user.login}!`);
+    console.log(
+      `Embed notification sent to Discord for unfollowed user ${user.login}!`
+    );
   } catch (error) {
     console.error("Error sending Discord embed notification:", error);
   }
