@@ -1,6 +1,6 @@
 <div align="center">
   <h1>
-    Github-Followers-Bot
+    Github-Profile-Booster
   </h1>
 </div>
 <p align="center">
