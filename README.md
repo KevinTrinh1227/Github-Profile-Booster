@@ -1,3 +1,35 @@
+<!-- devfoliox
+{
+  "title": "Github-Profile-Booster",
+  "summary": "A small toolkit to make your GitHub profile look cleaner and more impressive with badges, stats, and README helpers.",
+  "description": [
+    "Github-Profile-Booster helps you generate profile sections, badges, and stats blocks so your GitHub profile stands out to recruiters and collaborators.",
+    "It focuses on simple configuration and copy-paste friendly snippets so you can update your profile in minutes."
+  ],
+  "technologies": ["TypeScript", "Node.js", "GitHub API"],
+  "start": "Oct 2024",
+  "end": "Present",
+
+  "stats_stars": true,
+  "stats_forks": true,
+  "stats_downloads": false,
+
+  "links": [
+    {
+      "label": "Source",
+      "href": "https://github.com/KevinTrinh1227/Github-Profile-Booster",
+      "type": "github"
+    },
+    {
+      "label": "Docs",
+      "href": "https://github.com/KevinTrinh1227/Github-Profile-Booster#readme",
+      "type": "docs"
+    }
+  ]
+}
+-->
+
+
 <div align="center">
   <h1>
     Github-Profile-Booster
